@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import {
     Code2,
@@ -33,6 +33,8 @@ function App() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
     const [isDarkMode, setIsDarkMode] = useState(true);
+    const [isCursorVisible, setIsCursorVisible] = useState(false); // Cursor visibility state
+    const scrollTimeoutRef = useRef(null); // Ref to track scroll timeout
 
     useEffect(() => {
         emailjs.init("YOUR_PUBLIC_KEY"); // Replace with your EmailJS public key
@@ -40,16 +42,64 @@ function App() {
 
     useEffect(() => {
         const handleScroll = () => setScrollY(window.scrollY);
-        const handleMouseMove = (e: MouseEvent) => {
+
+        // Mouse event handler for desktop
+        const handleMouseMove = (e) => {
             setMousePosition({ x: e.clientX, y: e.clientY });
+            setIsCursorVisible(true); // Show cursor on mouse move
         };
 
+        // Touch event handlers for mobile
+        const handleTouchStart = (e) => {
+            const touch = e.touches[0];
+            setMousePosition({ x: touch.clientX, y: touch.clientY });
+            // Cursor is not shown on touchstart to avoid appearing on taps
+        };
+
+        const handleTouchMove = (e) => {
+            const touch = e.touches[0];
+            setMousePosition({ x: touch.clientX, y: touch.clientY });
+            setIsCursorVisible(true); // Show cursor during touchmove (scrolling)
+
+            // Clear any existing timeout
+            if (scrollTimeoutRef.current) {
+                clearTimeout(scrollTimeoutRef.current);
+            }
+
+            // Set timeout to hide cursor after scrolling stops
+            scrollTimeoutRef.current = setTimeout(() => {
+                setIsCursorVisible(false);
+            }, 100); // Adjust delay (100ms) as needed
+        };
+
+        const handleTouchEnd = () => {
+            setIsCursorVisible(false); // Hide cursor immediately on touchend
+            if (scrollTimeoutRef.current) {
+                clearTimeout(scrollTimeoutRef.current);
+            }
+        };
+
+        // Add event listeners
         window.addEventListener("scroll", handleScroll);
         window.addEventListener("mousemove", handleMouseMove);
+        window.addEventListener("touchstart", handleTouchStart, {
+            passive: false,
+        });
+        window.addEventListener("touchmove", handleTouchMove, {
+            passive: false,
+        });
+        window.addEventListener("touchend", handleTouchEnd);
 
+        // Cleanup event listeners and timeout
         return () => {
             window.removeEventListener("scroll", handleScroll);
             window.removeEventListener("mousemove", handleMouseMove);
+            window.removeEventListener("touchstart", handleTouchStart);
+            window.removeEventListener("touchmove", handleTouchMove);
+            window.removeEventListener("touchend", handleTouchEnd);
+            if (scrollTimeoutRef.current) {
+                clearTimeout(scrollTimeoutRef.current);
+            }
         };
     }, []);
 
@@ -79,7 +129,7 @@ function App() {
         });
     };
 
-    const handleContactClick = (type: string, value: string) => {
+    const handleContactClick = (type, value) => {
         navigator.clipboard.writeText(value);
         toast.success(`${type} copié dans le presse-papiers!`, {
             style: {
@@ -92,11 +142,7 @@ function App() {
         });
     };
 
-    const handleProjectAction = (
-        action: string,
-        projectTitle: string,
-        url?: string,
-    ) => {
+    const handleProjectAction = (action, projectTitle, url) => {
         if (url === "#") {
             toast(`Ce code est privé pour le client`, {
                 icon: action === "CODE" ? "💻" : "🚀",
@@ -125,9 +171,9 @@ function App() {
         }
     };
 
-    const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleFormSubmit = (e) => {
         e.preventDefault();
-        const form = e.target as HTMLFormElement;
+        const form = e.target;
         emailjs
             .sendForm(
                 "service_5leulb8",
@@ -196,7 +242,7 @@ function App() {
         }
     }, [isDarkMode]);
 
-    const scrollToSection = (sectionId: string) => {
+    const scrollToSection = (sectionId) => {
         const element = document.getElementById(sectionId);
         if (element) {
             element.scrollIntoView({ behavior: "smooth" });
@@ -242,7 +288,9 @@ function App() {
 
             {/* Custom Cursor */}
             <div
-                className="fixed w-4 h-4 border-2 border-black dark:border-white rounded-full pointer-events-none z-50 transition-transform duration-100"
+                className={`fixed w-4 h-4 border-2 border-black dark:border-white rounded-full pointer-events-none z-50 transition-transform duration-100 ${
+                    isCursorVisible ? "opacity-100" : "opacity-0"
+                }`}
                 style={{
                     left: mousePosition.x - 8,
                     top: mousePosition.y - 8,
@@ -379,7 +427,6 @@ function App() {
                                 : "brightness(0.4) contrast(1.3) grayscale(1)",
                         }}
                     />
-                    {/* Overlay for better text readability */}
                     <div
                         className={`absolute inset-0 ${
                             isDarkMode ? "bg-black/60" : "bg-black/50"
@@ -455,7 +502,6 @@ function App() {
                     </div>
                 </div>
 
-                {/* Scroll Indicator */}
                 <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10">
                     <div className="flex flex-col items-center animate-bounce">
                         <div className="w-px h-16 bg-white/50 mb-2" />
@@ -652,7 +698,7 @@ function App() {
                     <div className="text-center mb-16">
                         <div className="overflow-hidden mb-4">
                             <h2 className="text-4xl md:text-5xl font-bold tracking-tight animate-slideUp">
-                                SELECTED WORK
+                                MES PROJETS
                             </h2>
                         </div>
                         <div className="w-16 h-px bg-black dark:bg-white mx-auto animate-expandWidth" />
@@ -730,7 +776,7 @@ function App() {
                                                         className="inline mr-2"
                                                         size={14}
                                                     />
-                                                    LIVE
+                                                    VOIR
                                                 </button>
                                             </div>
                                         </div>
