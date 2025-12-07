@@ -254,7 +254,7 @@ function App() {
         { name: "React/Next.js", level: 75, category: "Frontend" },
         { name: "Node.js/Nest.js/Laravel", level: 90, category: "Backend" },
         { name: "MySql/MongoDB", level: 80, category: "Database" },
-        { name: "Docker/Git", level: 85, category: "DevOps" },
+        { name: "Docker/Git, CI/CD", level: 80, category: "DevOps" },
         { name: "AWS/GCP", level: 82, category: "Cloud" },
     ];
 
@@ -267,6 +267,39 @@ function App() {
             year: "JUIN 2025",
             status: "Production",
             link: "https://konsortium-ci.com/",
+            url: "#",
+            enCours: true,
+        },
+        {
+            title: "200bounty",
+            description:
+                "Une application web qui met en relation les hackers ethiques et les entreprises. J'ai travaillé sur le backend.",
+            tech: ["Nest Js", "Node Js", "Mysql"],
+            year: "Fevrier 2025",
+            status: "Production",
+            link: "https://200bounty.com/",
+            url: "#",
+            enCours: false,
+        },
+        {
+            title: "Mon portfolio",
+            description:
+                "Tu es en train de le voir! Mon portfolio personnel développé avec React et Framer Motion.",
+            tech: ["React Js", "Tailwind Css", "Email Js"],
+            year: "Juillet 2025",
+            status: "Production",
+            link: "#",
+            url: "https://github.com/Dev-aquilas225/porfolio-final",
+            enCours: true,
+        },
+        {
+            title: "Volailles d'or",
+            description:
+                "J'ai juste aidé a la conception et au deployement sur mon serveur",
+            tech: ["React Js", "Tailwind Css", "Email Js"],
+            year: "Novembre 2025",
+            status: "Production",
+            link: "https://volaillesdor.com/",
             url: "#",
             enCours: true,
         },
@@ -339,7 +372,7 @@ function App() {
 
             <nav className="fixed top-0 left-0 right-0 z-40 bg-white/90 dark:bg-black/90 backdrop-blur-sm border-b border-black/20 dark:border-white/20 transition-colors duration-300">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
-                    <div className="flex justify-between items-center py-4">
+                    <div className="flex justify-between items-center py-2">
                         <motion.div
                             initial={{ opacity: 0, x: -50 }}
                             animate={{ opacity: 1, x: 0 }}
@@ -678,7 +711,7 @@ function App() {
                                             FRONTEND
                                         </h3>
                                         <p className="text-sm text-gray-600 dark:text-gray-400">
-                                            React, Next.js, TypeScript
+                                            React, Next.js, TypeScript, ReactJS
                                         </p>
                                     </motion.div>
                                     <motion.div
@@ -693,7 +726,7 @@ function App() {
                                             DATABASE
                                         </h3>
                                         <p className="text-sm text-gray-600 dark:text-gray-400">
-                                            MySql, MongoDB
+                                            MySql, MongoDB, PostgreSQL
                                         </p>
                                     </motion.div>
                                 </div>
@@ -710,7 +743,8 @@ function App() {
                                             BACKEND
                                         </h3>
                                         <p className="text-sm text-gray-600 dark:text-gray-400">
-                                            Node.js, Nest.js, Laravel
+                                            Node.js, Nest.js, Laravel, Java,
+                                            SpringBoot
                                         </p>
                                     </motion.div>
                                     <motion.div
@@ -981,9 +1015,9 @@ function App() {
                                 {
                                     icon: Phone,
                                     type: "Phone",
-                                    value: "002250768571247",
+                                    value: "002250546794565",
                                     label: "CEL / WHATSAPP / TELEGRAM",
-                                    display: "+2250768571247",
+                                    display: "+2250546794565",
                                 },
                             ].map((contact, index) => (
                                 <motion.div
