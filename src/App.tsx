@@ -372,17 +372,21 @@ function App() {
 
             <nav className="fixed top-0 left-0 right-0 z-40 bg-white/90 dark:bg-black/90 backdrop-blur-sm border-b border-black/20 dark:border-white/20 transition-colors duration-300">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
-                    <div className="flex justify-between items-center py-2">
+                    <div className="flex justify-between items-center py-1">
                         <motion.div
                             initial={{ opacity: 0, x: -50 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ duration: 0.5 }}
                             className="text-xl font-bold tracking-wider"
                         >
-                            <img src={logo} className="w-20 h-20" alt="Logo" />
+                            <img
+                                src={logo}
+                                className="w-12 h-12 md:w-14 md:h-14"
+                                alt="Logo"
+                            />
                         </motion.div>
 
-                        <div className="hidden md:flex items-center space-x-12">
+                        <div className="hidden md:flex items-center space-x-8">
                             {[
                                 { id: "hero", label: "HOME" },
                                 { id: "about", label: "A PROPOS" },
