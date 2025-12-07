@@ -27,6 +27,7 @@ import emailjs from "@emailjs/browser";
 
 import hero_bg from "./asset/images/hero_bg.jpg";
 import logo from "./asset/images/logo.png";
+import cv from "./asset/cv/cv_aquilas_dev.pdf";
 
 function App() {
     const [scrollY, setScrollY] = useState(0);
@@ -103,6 +104,33 @@ function App() {
     }, []);
 
     const handleDownloadResume = () => {
+        const lastDownload = localStorage.getItem("cv_last_download");
+
+        const today = new Date().toISOString().split("T")[0]; // format YYYY-MM-DD
+
+        // Vérifie si l’utilisateur a déjà téléchargé aujourd’hui
+        if (lastDownload === today) {
+            toast.error("Vous avez déja telechargé.", {
+                style: {
+                    background: isDarkMode ? "#1f2937" : "#f9fafb",
+                    color: isDarkMode ? "#f9fafb" : "#1f2937",
+                    border: `1px solid ${isDarkMode ? "#374151" : "#d1d5db"}`,
+                    fontFamily: "JetBrains Mono, monospace",
+                    fontSize: "14px",
+                },
+            });
+            return;
+        }
+
+        // Si pas encore téléchargé aujourd’hui → Téléchargement du fichier
+        const link = document.createElement("a");
+        link.href = `${cv}`; // Mets ici le chemin de ton CV dans public/
+        link.download = "CV_AQUILAS_DEV.pdf";
+        link.click();
+
+        // Enregistre la date du téléchargement
+        localStorage.setItem("cv_last_download", today);
+
         toast.success("CV téléchargé avec succès!", {
             style: {
                 background: isDarkMode ? "#1f2937" : "#f9fafb",
@@ -672,7 +700,7 @@ function App() {
                             >
                                 <div className="text-center">
                                     <div className="text-3xl font-bold mb-2">
-                                        1+
+                                        2+
                                     </div>
                                     <div className="text-sm text-gray-600 dark:text-gray-400 tracking-wider">
                                         ANNÉES
@@ -688,7 +716,7 @@ function App() {
                                 </div>
                                 <div className="text-center">
                                     <div className="text-3xl font-bold mb-2">
-                                        11+
+                                        7+
                                     </div>
                                     <div className="text-sm text-gray-600 dark:text-gray-400 tracking-wider">
                                         CLIENTS
